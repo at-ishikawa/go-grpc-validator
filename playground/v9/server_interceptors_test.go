@@ -1,17 +1,17 @@
 package grpc_playground_validator
 
 import (
-    "context"
-    "reflect"
-    "testing"
+	"context"
+	"reflect"
+	"testing"
 
-    "github.com/go-playground/locales/en"
-    ut "github.com/go-playground/universal-translator"
-    "google.golang.org/genproto/googleapis/rpc/errdetails"
-    "google.golang.org/grpc/codes"
-    "google.golang.org/grpc/status"
-    validatorv9 "gopkg.in/go-playground/validator.v9"
-    translationsen "gopkg.in/go-playground/validator.v9/translations/en"
+	"github.com/go-playground/locales/en"
+	ut "github.com/go-playground/universal-translator"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	validatorv9 "gopkg.in/go-playground/validator.v9"
+	translationsen "gopkg.in/go-playground/validator.v9/translations/en"
 )
 
 func TestUnaryServerInterceptor(t *testing.T) {
@@ -77,8 +77,8 @@ func TestUnaryServerInterceptor(t *testing.T) {
 			}(),
 		},
 		{
-			name:      "request is invalid and different translator",
-			validator: translatedValidator,
+			name:        "request is invalid and different translator",
+			validator:   translatedValidator,
 			request:     &request{},
 			response:    resp,
 			responseErr: nil,

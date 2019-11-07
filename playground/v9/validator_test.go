@@ -1,18 +1,18 @@
 package grpc_playground_validator
 
 import (
-    `context`
-    "reflect"
-    "sort"
-    "testing"
+	"context"
+	"reflect"
+	"sort"
+	"testing"
 
-    "github.com/go-playground/locales/en"
-    "github.com/go-playground/locales/fr"
-    "google.golang.org/genproto/googleapis/rpc/errdetails"
-    "google.golang.org/grpc/codes"
-    "google.golang.org/grpc/status"
-    validatorv9 "gopkg.in/go-playground/validator.v9"
-    fr_translations "gopkg.in/go-playground/validator.v9/translations/fr"
+	"github.com/go-playground/locales/en"
+	"github.com/go-playground/locales/fr"
+	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	validatorv9 "gopkg.in/go-playground/validator.v9"
+	fr_translations "gopkg.in/go-playground/validator.v9/translations/fr"
 )
 
 func TestNewValidator(t *testing.T) {
@@ -149,7 +149,7 @@ func TestValidator_ValidateGRPCRequest(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-		    ctx := NewContextWithLocale(context.Background(), tc.locale)
+			ctx := NewContextWithLocale(context.Background(), tc.locale)
 			got, gotErr := tc.validator.ValidateGRPCRequest(ctx, tc.request)
 			if got != nil && got.Details() != nil && len(got.Details()) > 0 {
 				br, _ := got.Details()[0].(*errdetails.BadRequest)

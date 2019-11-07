@@ -1,27 +1,27 @@
 package grpc_playground_validator
 
 import (
-    `context`
-    `errors`
-    "strings"
+	"context"
+	"errors"
+	"strings"
 
-    "github.com/go-playground/locales"
-    "github.com/go-playground/locales/en"
-    ut "github.com/go-playground/universal-translator"
-    "google.golang.org/grpc/codes"
-    "google.golang.org/grpc/grpclog"
-    "google.golang.org/grpc/status"
-    validatorv9 "gopkg.in/go-playground/validator.v9"
-    en_translations "gopkg.in/go-playground/validator.v9/translations/en"
+	"github.com/go-playground/locales"
+	"github.com/go-playground/locales/en"
+	ut "github.com/go-playground/universal-translator"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/grpclog"
+	"google.golang.org/grpc/status"
+	validatorv9 "gopkg.in/go-playground/validator.v9"
+	en_translations "gopkg.in/go-playground/validator.v9/translations/en"
 
-    `github.com/at-ishikawa/go-grpc-validator/internal`
+	"github.com/at-ishikawa/go-grpc-validator/internal"
 )
 
 // Validator validates struct with translated messages
 type Validator struct {
-    validate            *validatorv9.Validate
+	validate            *validatorv9.Validate
 	universalTranslator *ut.UniversalTranslator
-    fallbackLocale      string
+	fallbackLocale      string
 }
 
 type validatorOptions struct {
@@ -59,8 +59,8 @@ func WithRegisterDefaultTranslationFunc(localePrefix string, registerDefaultTran
 }
 
 var defaultOptions = validatorOptions{
-	fallbackTranslator: en.New(),
-	localeTranslators:  []locales.Translator{},
+	fallbackTranslator:       en.New(),
+	localeTranslators:        []locales.Translator{},
 	translationRegistrations: []defaultTranslationRegistration{},
 }
 
@@ -71,13 +71,13 @@ func NewValidator(vOpts ...ValidatorOptions) (*Validator, error) {
 		vo(&opt)
 	}
 	if len(opt.translationRegistrations) == 0 {
-	    opt.translationRegistrations = []defaultTranslationRegistration{
-            {
-                prefix:                         en.New().Locale(),
-                registerDefaultTranslationFunc: en_translations.RegisterDefaultTranslations,
-            },
-        }
-    }
+		opt.translationRegistrations = []defaultTranslationRegistration{
+			{
+				prefix:                         en.New().Locale(),
+				registerDefaultTranslationFunc: en_translations.RegisterDefaultTranslations,
+			},
+		}
+	}
 
 	allLocaleTranslators := append(opt.localeTranslators, opt.fallbackTranslator)
 	universalTranslator := ut.New(opt.fallbackTranslator, allLocaleTranslators...)
@@ -149,13 +149,13 @@ func (v *Validator) ValidateGRPCRequest(ctx context.Context, req interface{}) (*
 
 	locale := localeFromContext(ctx)
 	if locale == "" {
-	    locale = v.fallbackLocale
-    }
+		locale = v.fallbackLocale
+	}
 	t := v.getTranslator(locale)
 	br := internal.ConvertValidationErrors(errs.Translate(t))
 	if br == nil {
-        panic(errors.New("failed to validate request but cannot convert validation errors"))
-    }
+		panic(errors.New("failed to validate request but cannot convert validation errors"))
+	}
 
 	st := status.New(codes.InvalidArgument, "failed to validate request")
 	dstSt, err := st.WithDetails(br)

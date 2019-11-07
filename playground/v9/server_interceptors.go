@@ -1,12 +1,12 @@
 package grpc_playground_validator
 
 import (
-    `context`
+	"context"
 
-    `google.golang.org/grpc`
-    `google.golang.org/grpc/codes`
-    `google.golang.org/grpc/status`
-    validatorv9 "gopkg.in/go-playground/validator.v9"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+	validatorv9 "gopkg.in/go-playground/validator.v9"
 )
 
 // UnaryServerInterceptor returns validator server interceptor for every request.
@@ -20,11 +20,11 @@ func UnaryServerInterceptor(v *Validator) grpc.UnaryServerInterceptor {
 			return handler(ctx, req)
 		}
 
-        st, err := v.ValidateGRPCRequest(ctx, req)
+		st, err := v.ValidateGRPCRequest(ctx, req)
 		if err != nil {
-		    if inverr, ok := err.(*validatorv9.InvalidValidationError); ok {
-		        return nil, status.Errorf(codes.FailedPrecondition, "request is not able to validate: %s", inverr.Error())
-            }
+			if inverr, ok := err.(*validatorv9.InvalidValidationError); ok {
+				return nil, status.Errorf(codes.FailedPrecondition, "request is not able to validate: %s", inverr.Error())
+			}
 			return nil, status.Errorf(codes.Internal, "invalid request for validator: %s", err.Error())
 		}
 		if st != nil {
