@@ -6,7 +6,7 @@ This package requires that the struct of protobuf messages are generated with cu
 
 ## Install
 ```
-go get -u github.com:at-ishikawa/go-grpc-validator
+go get -u github.com/at-ishikawa/go-grpc-validator/playground/v9
 ```
 
 
